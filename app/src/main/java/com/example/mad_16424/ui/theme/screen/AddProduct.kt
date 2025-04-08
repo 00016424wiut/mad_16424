@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun AddWineScreen(
-    onCreateClick: (String, String, String, String) -> Unit // Passes data back to parent
+    onCreateClick: (String, String, String, String, String, String, String, String, String, String, Double) -> Unit // Passes data back to parent
 ) {
     var wineName by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
@@ -38,6 +38,10 @@ fun AddWineScreen(
     var date by remember { mutableStateOf("") }
     var quantity by remember { mutableStateOf("")}
     var frenchOak by remember { mutableStateOf("") }
+    var drinkTime by remember { mutableStateOf("")}
+    var ratingText by remember { mutableStateOf("")}
+    var rating by remember { mutableStateOf(0.0) }
+
 
     Column(
         modifier = Modifier
@@ -122,6 +126,23 @@ fun AddWineScreen(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
 
+        OutlinedTextField(
+            value = drinkTime,
+            onValueChange = { drinkTime = it },
+            label = { Text("When to drink *") },
+            modifier = Modifier.fillMaxWidth(),
+        )
+
+        OutlinedTextField(
+            value = ratingText,
+            onValueChange = {
+                ratingText = it
+                rating = it.toDoubleOrNull() ?: 0.0  // safely convert to Double
+            },
+            label = { Text("Wine rating *") },
+            modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        )
 
 
         Text("Product Photo", style = MaterialTheme.typography.bodyMedium)
@@ -138,7 +159,8 @@ fun AddWineScreen(
 
         Button(
             onClick = {
-                onCreateClick(wineName, description, alcoholVolume, monthsAging)
+                onCreateClick(wineName, description, alcoholVolume, monthsAging,bottleVolume, price, date,quantity,
+                    frenchOak, drinkTime, rating)
             },
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
