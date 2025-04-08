@@ -60,3 +60,4 @@ data class AWineResponse(
     @SerialName(value = "data")
     val data: WineRequest
 ): Response()
+
