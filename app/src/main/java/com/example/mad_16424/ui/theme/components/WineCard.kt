@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import com.example.mad_16424.R
 import com.example.mad_16424.model.Wine
 import androidx.compose.ui.Modifier
-import androidx.compose.material3.*
 import androidx.compose.foundation.lazy.items
 
 
@@ -78,10 +77,10 @@ fun WineCard(
             Spacer(modifier = Modifier.height(8.dp))
 
             Button(
-                onClick = { /* handle buy click */ },
+                onClick = { /* handle delete click */ },
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Text("Buy >>")
+                Text("Delete")
             }
         }
     }
