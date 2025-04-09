@@ -9,14 +9,14 @@ import java.sql.Date
 import java.text.SimpleDateFormat
 
 @Serializable
-open class MyResponse () {
+open class MyResponse (
     @SerialName(value = "code")
-    val code: Int = 0
+    val code: Int = 0,
     @SerialName(value = "status")
-    val status: String = ""
+    val status: String = "",
     @SerialName(value = "message")
-    val message: String = ""
-}
+    val message: String = "")
+
 
 @Serializable
 data class WineRecord(
@@ -33,6 +33,18 @@ data class WineRecord(
     val price: Double,
     @SerialName(value = "date")
     val date: String,
+    @SerialName(value = "quantity")
+    val quantity: Int,
+    @SerialName(value = "alcoholVolume")
+    val alcoholVolume: Double,
+    @SerialName(value = "frenchOak")
+    val frenchOak: Double,
+    @SerialName(value = "drinkTime")
+    val drinkTime: String,
+    @SerialName(value = "rating")
+    val rating: Double,
+    @SerialName(value = "image")
+    val image: String,
 )
 
 @Serializable

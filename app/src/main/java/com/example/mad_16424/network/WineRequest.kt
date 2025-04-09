@@ -27,6 +27,7 @@ class WineRequest {
     var drinkTime: String = ""
     @SerialName ("double_three")
     var rating: Double = 0.0
+
 }
 // need to ask
 @Serializable

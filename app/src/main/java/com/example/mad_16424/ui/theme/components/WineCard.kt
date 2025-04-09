@@ -24,7 +24,10 @@ import com.example.mad_16424.R
 import com.example.mad_16424.model.Wine
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.lazy.items
-
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 
 
 @Composable
@@ -32,6 +35,8 @@ fun WineCard(
     wine: Wine,
     modifier: Modifier = Modifier
 ) {
+    var showDialog by remember { mutableStateOf(false) }
+
     Card(
         modifier = modifier
             .padding(16.dp)
@@ -43,7 +48,7 @@ fun WineCard(
             modifier = Modifier.padding(16.dp)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.wine_image), // Replace with dynamic image if needed
+                painter = painterResource(id = R.drawable.wine_image),
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()

@@ -13,5 +13,5 @@ data class Wine (
     val frenchOak: Double,
     val drinkTime: String,
     val rating: Double,
-    val wineImage: Int
+    val wineImage: String
 )
