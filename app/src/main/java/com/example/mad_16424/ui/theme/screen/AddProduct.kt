@@ -22,8 +22,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.example.mad_16424.R
 
 @Composable
 fun AddWineScreen(
@@ -36,135 +38,141 @@ fun AddWineScreen(
     var bottleVolume by remember { mutableStateOf("") }
     var price by remember { mutableStateOf("") }
     var date by remember { mutableStateOf("") }
-    var quantity by remember { mutableStateOf("")}
+    var quantity by remember { mutableStateOf("") }
     var frenchOak by remember { mutableStateOf("") }
-    var drinkTime by remember { mutableStateOf("")}
-    var ratingText by remember { mutableStateOf("")}
+    var drinkTime by remember { mutableStateOf("") }
+    var ratingText by remember { mutableStateOf("") }
     var rating by remember { mutableStateOf(0.0) }
 
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+            .background(colorResource(id = R.color.primary_1))
     ) {
-        Text(
-            text = "Add new product",
-            style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        )
-
-        OutlinedTextField(
-            value = wineName,
-            onValueChange = { wineName = it },
-            label = { Text("Product Name *") },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        OutlinedTextField(
-            value = description,
-            onValueChange = { description = it },
-            label = { Text("Product Description *") },
-            modifier = Modifier.fillMaxWidth(),
-            maxLines = 4
-        )
-
-        OutlinedTextField(
-            value = alcoholVolume,
-            onValueChange = { alcoholVolume = it },
-            label = { Text("Alcohol by volume *") },
-            modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-        )
-
-        OutlinedTextField(
-            value = monthsAging,
-            onValueChange = { monthsAging = it },
-            label = { Text("Total months aging *") },
-            modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-        )
-
-        OutlinedTextField(
-            value = bottleVolume,
-            onValueChange = { bottleVolume = it },
-            label = { Text("The bottle volume *") },
-            modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-        )
-
-        OutlinedTextField(
-            value = price,
-            onValueChange = { price = it },
-            label = { Text("Price *") },
-            modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-        )
-
-        OutlinedTextField(
-            value = date,
-            onValueChange = { date = it },
-            label = { Text("The date of the production *") },
-            modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-        )
-
-        OutlinedTextField(
-            value = quantity,
-            onValueChange = { quantity = it },
-            label = { Text("The quantity of wine *") },
-            modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-        )
-
-        OutlinedTextField(
-            value = frenchOak,
-            onValueChange = { frenchOak = it },
-            label = { Text("The percent of french oak *") },
-            modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-        )
-
-        OutlinedTextField(
-            value = drinkTime,
-            onValueChange = { drinkTime = it },
-            label = { Text("When to drink *") },
-            modifier = Modifier.fillMaxWidth(),
-        )
-
-        OutlinedTextField(
-            value = ratingText,
-            onValueChange = {
-                ratingText = it
-                rating = it.toDoubleOrNull() ?: 0.0  // safely convert to Double
-            },
-            label = { Text("Wine rating *") },
-            modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-        )
-
-
-        Text("Product Photo", style = MaterialTheme.typography.bodyMedium)
-
-        Box(
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(120.dp)
-                .background(Color.LightGray, RoundedCornerShape(12.dp)),
-            contentAlignment = Alignment.Center
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Text("Click to upload", style = MaterialTheme.typography.bodySmall)
-        }
+            Text(
+                text = "Add new product",
+                style = MaterialTheme.typography.headlineSmall,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
 
-        Button(
-            onClick = {
-                onCreateClick(wineName, description, alcoholVolume, monthsAging,bottleVolume, price, date,quantity,
-                    frenchOak, drinkTime, rating)
-            },
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        ) {
-            Text("Create a new product")
+            OutlinedTextField(
+                value = wineName,
+                onValueChange = { wineName = it },
+                label = { Text("Product Name *") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            OutlinedTextField(
+                value = description,
+                onValueChange = { description = it },
+                label = { Text("Product Description *") },
+                modifier = Modifier.fillMaxWidth(),
+                maxLines = 4
+            )
+
+            OutlinedTextField(
+                value = alcoholVolume,
+                onValueChange = { alcoholVolume = it },
+                label = { Text("Alcohol by volume *") },
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            )
+
+            OutlinedTextField(
+                value = monthsAging,
+                onValueChange = { monthsAging = it },
+                label = { Text("Total months aging *") },
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            )
+
+            OutlinedTextField(
+                value = bottleVolume,
+                onValueChange = { bottleVolume = it },
+                label = { Text("The bottle volume *") },
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            )
+
+            OutlinedTextField(
+                value = price,
+                onValueChange = { price = it },
+                label = { Text("Price *") },
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            )
+
+            OutlinedTextField(
+                value = date,
+                onValueChange = { date = it },
+                label = { Text("The date of the production *") },
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            )
+
+            OutlinedTextField(
+                value = quantity,
+                onValueChange = { quantity = it },
+                label = { Text("The quantity of wine *") },
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            )
+
+            OutlinedTextField(
+                value = frenchOak,
+                onValueChange = { frenchOak = it },
+                label = { Text("The percent of french oak *") },
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            )
+
+            OutlinedTextField(
+                value = drinkTime,
+                onValueChange = { drinkTime = it },
+                label = { Text("When to drink *") },
+                modifier = Modifier.fillMaxWidth(),
+            )
+
+            OutlinedTextField(
+                value = ratingText,
+                onValueChange = {
+                    ratingText = it
+                    rating = it.toDoubleOrNull() ?: 0.0  // safely convert to Double
+                },
+                label = { Text("Wine rating *") },
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            )
+
+
+            Text("Product Photo", style = MaterialTheme.typography.bodyMedium)
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(120.dp)
+                    .background(Color.LightGray, RoundedCornerShape(12.dp)),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("Click to upload", style = MaterialTheme.typography.bodySmall)
+            }
+
+            Button(
+                onClick = {
+                    onCreateClick(wineName, description, alcoholVolume, monthsAging,bottleVolume, price, date,quantity,
+                        frenchOak, drinkTime, rating)
+                },
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Text("Create a new product")
+            }
         }
     }
 }

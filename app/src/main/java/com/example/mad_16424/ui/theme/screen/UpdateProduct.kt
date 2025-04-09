@@ -22,8 +22,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.example.mad_16424.R
 
 @Composable
 fun UpdateProduct(
@@ -43,7 +45,12 @@ fun UpdateProduct(
     var rating by remember { mutableStateOf(0.0) }
 
 
-    Column(
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(id = R.color.primary_1))
+    ){
+        Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
@@ -166,5 +173,6 @@ fun UpdateProduct(
         ) {
             Text("Update the product")
         }
+    }
     }
 }

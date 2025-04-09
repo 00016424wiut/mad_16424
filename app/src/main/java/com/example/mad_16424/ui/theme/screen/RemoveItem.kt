@@ -1,8 +1,11 @@
 package com.example.mad_16424.ui.theme.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,54 +18,62 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.example.mad_16424.R
 
 @Composable
 fun RemoveItemDialog(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit
 ) {
-    Dialog(onDismissRequest = onDismiss) {
-        Surface(
-            shape = RoundedCornerShape(24.dp),
-            color = Color(0xFFF8F6E6) // light beige background
-        ) {
-            Column(
-                modifier = Modifier
-                    .padding(24.dp)
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(id = R.color.primary_1))
+    ) {
+        Dialog(onDismissRequest = onDismiss) {
+            Surface(
+                shape = RoundedCornerShape(24.dp),
+                color = Color(0xFFF8F6E6) // light beige background
             ) {
-                Text(
-                    text = "Remove this item?",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black,
-                    modifier = Modifier.padding(bottom = 24.dp)
-                )
-
-                Row(
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    modifier = Modifier.fillMaxWidth()
+                Column(
+                    modifier = Modifier
+                        .padding(24.dp)
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Button(
-                        onClick = onConfirm,
-                        colors = ButtonDefaults.buttonColors(Color.DarkGray),
-                        shape = RoundedCornerShape(12.dp),
-                        modifier = Modifier.weight(1f).padding(end = 8.dp)
-                    ) {
-                        Text("Remove", color = Color.White)
-                    }
+                    Text(
+                        text = "Remove this item?",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black,
+                        modifier = Modifier.padding(bottom = 24.dp)
+                    )
 
-                    OutlinedButton(
-                        onClick = onDismiss,
-                        shape = RoundedCornerShape(12.dp),
-                        modifier = Modifier.weight(1f).padding(start = 8.dp)
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("Cancel", color = Color.Black)
+                        Button(
+                            onClick = onConfirm,
+                            colors = ButtonDefaults.buttonColors(Color.DarkGray),
+                            shape = RoundedCornerShape(12.dp),
+                            modifier = Modifier.weight(1f).padding(end = 8.dp)
+                        ) {
+                            Text("Remove", color = Color.White)
+                        }
+
+                        OutlinedButton(
+                            onClick = onDismiss,
+                            shape = RoundedCornerShape(12.dp),
+                            modifier = Modifier.weight(1f).padding(start = 8.dp)
+                        ) {
+                            Text("Cancel", color = Color.Black)
+                        }
                     }
                 }
             }

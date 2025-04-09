@@ -1,13 +1,16 @@
 package com.example.mad_16424.ui.theme.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -15,97 +18,110 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.mad_16424.R
 import com.example.mad_16424.model.Wine
 import androidx.compose.ui.Modifier
-import androidx.compose.foundation.lazy.items
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.ui.Alignment
 
 
 @Composable
 fun WineCard(
     wine: Wine,
-    modifier: Modifier = Modifier
+    onWineClicked: () -> Unit,
+    onRemoveClicked: () -> Unit,
+    onEditClicked: () -> Unit
 ) {
-    var showDialog by remember { mutableStateOf(false) }
-
     Card(
-        modifier = modifier
+        modifier = Modifier
+            .fillMaxWidth()
             .padding(16.dp)
-            .fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(8.dp)
+            .clickable { onWineClicked() }, // 👈 Navigate to WineDetailsScreen
+        elevation = CardDefaults.cardElevation(4.dp)
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
+            // Left: Wine info
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 16.dp)
+            ) {
+                // ⭐ Star ratings
+                Row {
+                    repeat(5) {
+                        Icon(
+                            imageVector = Icons.Default.Star,
+                            contentDescription = "Star",
+                            tint = Color(0xFFFFD700),
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = wine.wineName,
+                    style = MaterialTheme.typography.titleMedium
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    text = wine.description,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.widthIn(max = 250.dp)
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "$${wine.price} / ${wine.bottleVolume} ml",
+                    style = MaterialTheme.typography.bodySmall
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Buttons
+                Row {
+                    Button(
+                        onClick = {
+                            onEditClicked()
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF5EAD6))
+                    ) {
+                        Text("Update")
+                    }
+
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    Button(
+                        onClick = {
+                            onRemoveClicked()
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE57373))
+                    ) {
+                        Text("Delete")
+                    }
+                }
+            }
+
+            // Right: Wine image
             Image(
                 painter = painterResource(id = R.drawable.wine_image),
-                contentDescription = null,
+                contentDescription = wine.wineName,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp),
-                contentScale = ContentScale.Crop
+                    .size(140.dp)
+                    .padding(8.dp)
             )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text(
-                text = wine.wineName,
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
-            )
-
-            Text(
-                text = wine.description,
-                style = MaterialTheme.typography.bodyMedium,
-                maxLines = 3,
-                overflow = TextOverflow.Ellipsis
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = "${wine.price} / ${wine.bottleVolume}",
-                style = MaterialTheme.typography.bodySmall,
-                color = Color.Gray
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Button(
-                onClick = { /* handle delete click */ },
-                shape = RoundedCornerShape(8.dp)
-            ) {
-                Text("Delete")
-            }
-
-            Button(
-                onClick = { /* handle edit click */ },
-                shape = RoundedCornerShape(8.dp)
-            ) {
-                Text("Edit")
-            }
         }
     }
 }
-
-@Composable
-fun WineList(wines: List<Wine>) {
-    LazyColumn {
-        items(wines) { wine ->
-            WineCard(wine = wine)
-        }
-    }
-}
-
-
-
