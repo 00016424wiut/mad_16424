@@ -82,6 +82,13 @@ fun WineCard(
             ) {
                 Text("Delete")
             }
+
+            Button(
+                onClick = { /* handle edit click */ },
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Text("Edit")
+            }
         }
     }
 }
