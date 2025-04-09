@@ -1,26 +1,15 @@
 package com.example.mad_16424.ui.theme.viewModel
 
-import android.util.Base64DataException
 import android.util.Log
-import android.view.View
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mad_16424.model.Wine
-import com.example.mad_16424.network.WineApiServices
-import com.example.mad_16424.R
 import com.example.mad_16424.data.WineRepository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
-import retrofit2.Retrofit
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import okhttp3.MediaType.Companion.toMediaType
-import androidx.lifecycle.viewModelScope
+import com.example.mad_16424.network.WineRequest
 
 class MainViewModel : ViewModel() {
     private val repository:  WineRepository = WineRepository()
@@ -54,7 +43,7 @@ class MainViewModel : ViewModel() {
                         frenchOak = wineDto.frenchOak.toDouble() ?: 0.0,
                         drinkTime = wineDto.drinkTime ?: "",
                         rating = wineDto.rating.toDouble() ?: 0.0,
-                        wineImage = TODO(),
+                        wineImage = wineDto.image,
                     )}
                 getAllResponse = GetAllResponse.Success(wineList)
             } catch (e: Exception){
@@ -77,9 +66,9 @@ class MainViewModel : ViewModel() {
     var getByIdResponse by mutableStateOf<GetByIdResponse?>(null)
         private set
 
-    fun getGymEquipmentById(gymEquipmentId: String) {
+    fun getWineById(wineEquipmentId: String) {
         getByIdResponse = GetByIdResponse.Loading
-        val id = gymEquipmentId.toIntOrNull()
+        val id = wineEquipmentId.toIntOrNull()
         if (id == null) {
             Log.d("get_wine_validation_error", "Invalid wine ID")
             return
@@ -92,16 +81,16 @@ class MainViewModel : ViewModel() {
                     id = response.data.id,
                     wineName = response.data.name,
                     description = response.data.description ?: "",
-                    price = response.data.price?.toDouble() ?: 0.0,
-                    bottleVolume = response.data.bottleVolume?.toInt() ?: 0,
+                    price = response.data.price.toDouble() ?: 0.0,
+                    bottleVolume = response.data.bottleVolume.toInt() ?: 0,
                     date = response.data.date ?: "",
-                    wineAge = response.data.wineAge?.toInt() ?: 0,
+                    wineAge = response.data.wineAge.toInt() ?: 0,
                     quantity = response.data.quantity.toInt() ?: 0,
-                    alcoholVolume = response.data.alcoholVolume?.toDouble() ?: 0.0,
-                    frenchOak = response.data.frenchOak?.toDouble() ?: 0.0,
+                    alcoholVolume = response.data.alcoholVolume.toDouble() ?: 0.0,
+                    frenchOak = response.data.frenchOak.toDouble() ?: 0.0,
                     drinkTime = response.data.drinkTime ?: "",
-                    rating = response.data.rating?.toDouble() ?: 0.0,
-                    wineImage = TODO(),
+                    rating = response.data.rating.toDouble() ?: 0.0,
+                    wineImage = response.data.image,
                 )
                 getByIdResponse = GetByIdResponse.Success(
                     wineDto
@@ -117,61 +106,89 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    sealed class CreateResponse {
+        data object Loading: CreateResponse()
+        data class Success(val message: String): CreateResponse()
+        data class Error(val message: String): CreateResponse()
+    }
+    var createResponseState by mutableStateOf<CreateResponse?>(null)
+        private set
+
+    fun createWine(equipment: WineRequest) {
+        createResponseState = CreateResponse.Loading
+
+        viewModelScope.launch {
+            try {
+                val response = repository.createWine(equipment)
+
+                createResponseState = CreateResponse.Success(response.message)
+            } catch (e: Exception) {
+                val message = e.message
+                if (message == null) {
+                    createResponseState = null
+                    return@launch
+                }
+                createResponseState = CreateResponse.Error(message)
+            }
+        }
+    }
+
+    sealed class UpdateResponse {
+        data object Loading: UpdateResponse()
+        data class Success(val message: String): UpdateResponse()
+        data class Error(val message: String): UpdateResponse()
+    }
+    var updateResponse by mutableStateOf<UpdateResponse?>(null)
+
+    fun updateByIdWine(wine: Wine) {
+        updateResponse = UpdateResponse.Loading
+
+        viewModelScope.launch {
+            try {
+                val response = repository.updateWineById(wine)
+                Log.d("update_wine_response", response.message)
+                updateResponse = UpdateResponse.Success(response.message)
+            } catch (e: Exception) {
+                val message = e.message
+                if (message == null) {
+                    updateResponse = null
+                    return@launch
+                }
+                updateResponse = UpdateResponse.Error(message)
+            }
+        }
+    }
+
+    sealed class DeleteResponse {
+        data object Loading: DeleteResponse()
+        data class Success(val message: String): DeleteResponse()
+        data class Error(val message: String): DeleteResponse()
+    }
+    var deleteResponse by mutableStateOf<DeleteResponse?>(null)
+        private set
+
+    fun deleteWineById(wineId: String) {
+        deleteResponse = DeleteResponse.Loading
+
+        val id = wineId.toIntOrNull()
+        if (id == null) {
+            Log.d("delete_wine_validation_error", "Invalid wine ID")
+            return
+        }
+
+        viewModelScope.launch {
+            try {
+                val response = repository.deleteWineById(id)
+                deleteResponse = DeleteResponse.Success(response.message)
+            } catch (e: Exception) {
+                val message = e.message
+                if (message == null) {
+                    deleteResponse = null
+                    return@launch
+                }
+                deleteResponse = DeleteResponse.Error(message)
+            }
+        }
+    }
+
 }
-
-
-
-//    private val _wineList = MutableStateFlow<List<Wine>>(emptyList())
-//    val wineList: StateFlow<List<Wine>> = _wineList.asStateFlow()
-//
-//    private val api: WineApiServices
-//
-//    init {
-//        val json = Json { ignoreUnknownKeys = true }
-//        val contentType = "application/json".toMediaType()
-//
-//        val retrofit = Retrofit.Builder()
-//            .baseUrl("https://wiutmadcw.uz/api/v1/")
-//            .addConverterFactory(json.asConverterFactory(contentType))
-//            .build()
-//
-//        api = retrofit.create(WineApiServices::class.java)
-//
-//        fetchWines()
-//    }
-//
-//    private fun fetchWines() {
-//        viewModelScope.launch {
-//            try {
-//                val response = api.getAll("00016424")
-//                val wines = response.data.map {
-//                    Wine(
-//                        wineName = it.name,
-//                        price = it.price,
-//                        wineImage = getWineImageResource(it.name),
-//                        id = TODO(),
-//                        description = TODO(),
-//                        wineAge = TODO(),
-//                        bottleVolume = TODO(),
-//                        date = TODO(),
-//                        quantity = TODO(),
-//                        alcoholVolume = TODO(),
-//                        frenchOak = TODO(),
-//                        drinkTime = TODO(),
-//                        rating = TODO()
-//                    )
-//                }
-//                _wineList.value = wines
-//            } catch (e: Exception) {
-//                Log.e("MainViewModel", "Failed to load wines: ${e.message}")
-//            }
-//        }
-//    }
-//
-//    fun getWineImageResource(name: String): Int {
-//        return when (name.lowercase()) {
-//            "cabernet sauvignon" -> R.drawable.img
-//            "champagne" -> R.drawable.img_1
-//            else -> R.drawable.wine
-//        }
-//    }
