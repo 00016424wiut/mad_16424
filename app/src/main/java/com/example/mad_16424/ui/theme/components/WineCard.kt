@@ -28,6 +28,8 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.mad_16424.ui.theme.Mad_16424Theme
 
 
 @Composable
@@ -40,21 +42,18 @@ fun WineCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
-            .clickable { onWineClicked() }, // 👈 Navigate to WineDetailsScreen
+            .padding(16.dp),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Left: Wine info
             Column(
                 modifier = Modifier
                     .weight(1f)
                     .padding(end = 16.dp)
             ) {
-                // ⭐ Star ratings
                 Row {
                     repeat(5) {
                         Icon(
@@ -90,7 +89,6 @@ fun WineCard(
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                // Buttons
                 Row {
                     Button(
                         onClick = {
@@ -114,7 +112,6 @@ fun WineCard(
                 }
             }
 
-            // Right: Wine image
             Image(
                 painter = painterResource(id = R.drawable.wine_image),
                 contentDescription = wine.wineName,

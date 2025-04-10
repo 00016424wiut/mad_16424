@@ -19,8 +19,6 @@ private const val BASE_URL =
 
 private val json = Json {
     ignoreUnknownKeys = true
-    isLenient = true
-    coerceInputValues = true
 }
 
 
@@ -32,7 +30,7 @@ private val retrofit = Retrofit.Builder()
 private const val STUDENT_ID = "00016424"
 
 
-interface  WineApiServices {
+interface WineApiServices {
     @GET("records/all")
     suspend fun getAll(
         @Query("student_id") studentId: String = STUDENT_ID
@@ -58,8 +56,8 @@ interface  WineApiServices {
         @Body request: WineRequest,
         @Query("student_id") studentId: String = STUDENT_ID
     ): MyResponse
-
     }
+
 object WineApi {
     val retrofitService: WineApiServices by lazy {
         retrofit.create(WineApiServices::class.java)

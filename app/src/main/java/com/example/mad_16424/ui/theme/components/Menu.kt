@@ -11,23 +11,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.mad_16424.R
 
 @Composable
-fun Menu() {
+fun Menu(modifier: Modifier = Modifier) {
     Column(
         verticalArrangement = Arrangement.spacedBy(4.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.size(24.dp)
+        modifier = modifier.size(24.dp)
     ) {
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            Box(modifier = Modifier.size(8.dp).background(Color.White, RoundedCornerShape(2.dp)))
-            Box(modifier = Modifier.size(8.dp).background(Color.White, RoundedCornerShape(2.dp)))
+            Box(modifier = Modifier.size(8.dp).background(colorResource(R.color.primary_2), RoundedCornerShape(2.dp)))
+            Box(modifier = Modifier.size(8.dp).background(colorResource(R.color.primary_2), RoundedCornerShape(2.dp)))
         }
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            Box(modifier = Modifier.size(8.dp).background(Color.White, RoundedCornerShape(2.dp)))
-            Box(modifier = Modifier.size(8.dp).background(Color.White, RoundedCornerShape(2.dp)))
+            Box(modifier = Modifier.size(8.dp).background(colorResource(R.color.primary_2), RoundedCornerShape(2.dp)))
+            Box(modifier = Modifier.size(8.dp).background(colorResource(R.color.primary_2), RoundedCornerShape(2.dp)))
         }
     }
 }

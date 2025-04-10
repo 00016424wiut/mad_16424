@@ -14,94 +14,81 @@ import com.example.mad_16424.network.WineRequest
 class MainViewModel : ViewModel() {
     private val repository:  WineRepository = WineRepository()
 
-    sealed class GetAllResponse{
+    sealed class GetAllResponse {
         data object Loading: GetAllResponse()
         data class Success(val data: List<Wine>): GetAllResponse()
         data class Error(val message: String): GetAllResponse()
     }
-    var getAllResponse by mutableStateOf<GetAllResponse?>(null)
+    var getAllResponseState by mutableStateOf<GetAllResponse?>(null)
         private set
 
 
-    //GetAll logic
-    fun getAllWine(){
-        getAllResponse = GetAllResponse.Loading
+    //Done!
+    fun getAllWine () {
+        getAllResponseState = GetAllResponse.Loading
         viewModelScope.launch {
             try {
                 val response = repository.getAllWine()
-                val wineList = response.data.map {wineDto ->
-                    Wine(
-                        id = wineDto.id,
-                        wineName = wineDto.name,
-                        description = wineDto.description ?: "",
-                        price = wineDto.price.toDouble() ?: 0.0,
-                        bottleVolume = wineDto.bottleVolume.toInt() ?: 0,
-                        date = wineDto.date ?: "",
-                        wineAge = wineDto.wineAge.toInt() ?: 0,
-                        quantity = wineDto.quantity.toInt() ?: 0,
-                        alcoholVolume = wineDto.alcoholVolume.toDouble() ?: 0.0,
-                        frenchOak = wineDto.frenchOak.toDouble() ?: 0.0,
-                        drinkTime = wineDto.drinkTime ?: "",
-                        rating = wineDto.rating.toDouble() ?: 0.0,
-                        wineImage = wineDto.image,
-                    )}
-                getAllResponse = GetAllResponse.Success(wineList)
-            } catch (e: Exception){
-                val message = e.message
-                if (message == null){
-                    getAllResponse = null
-                    return@launch
+                val wineList = response.data.map {
+                   Wine(
+                       id = it.id,
+                       wineName = it.name,
+                       description = it.description ?: "",
+                       wineAge = it.wineAge?.toIntOrNull() ?: 0,
+                       bottleVolume = it.bottleVolume?.toIntOrNull() ?: 0,
+                       price = it.price?.toDoubleOrNull() ?: 0.0,
+                       date = it.date ?: "",
+                       quantity = it.quantity?.toIntOrNull() ?: 0,
+                       alcoholVolume = it.alcoholVolume?.toDoubleOrNull() ?: 0.0,
+                       frenchOak = it.frenchOak?.toDoubleOrNull() ?: 0.0,
+                       drinkTime = it.drinkTime ?: "",
+                       rating = it.rating?.toDoubleOrNull() ?: 0.0
+                   )
                 }
-                getAllResponse = GetAllResponse.Error(message)
+                getAllResponseState = GetAllResponse.Success(wineList)
+            } catch (e: Exception){
+                getAllResponseState =
+                    if (e.message !== null ) GetAllResponse.Error(e.message!!)
+                    else null
             }
         }
     }
 
-    //GetById logic
+    //In progress
     sealed class GetByIdResponse {
         data object Loading: GetByIdResponse()
         data class Success(val data: Wine): GetByIdResponse()
         data class Error(val message: String): GetByIdResponse()
     }
-    var getByIdResponse by mutableStateOf<GetByIdResponse?>(null)
+    var getByIdResponseState by mutableStateOf<GetByIdResponse?>(null)
         private set
 
     fun getWineById(wineEquipmentId: String) {
-        getByIdResponse = GetByIdResponse.Loading
-        val id = wineEquipmentId.toIntOrNull()
-        if (id == null) {
-            Log.d("get_wine_validation_error", "Invalid wine ID")
-            return
-        }
+        getByIdResponseState = GetByIdResponse.Loading
+        val id = wineEquipmentId.toIntOrNull() ?: return
 
         viewModelScope.launch {
             try {
                 val response = repository.getWineById(id)
-                val wineDto = Wine(
+                val wine = Wine(
                     id = response.data.id,
                     wineName = response.data.name,
                     description = response.data.description ?: "",
-                    price = response.data.price.toDouble() ?: 0.0,
-                    bottleVolume = response.data.bottleVolume.toInt() ?: 0,
+                    wineAge = response.data.wineAge?.toIntOrNull() ?: 0,
+                    bottleVolume = response.data.bottleVolume?.toIntOrNull() ?: 0,
+                    price = response.data.price?.toDoubleOrNull() ?: 0.0,
                     date = response.data.date ?: "",
-                    wineAge = response.data.wineAge.toInt() ?: 0,
-                    quantity = response.data.quantity.toInt() ?: 0,
-                    alcoholVolume = response.data.alcoholVolume.toDouble() ?: 0.0,
-                    frenchOak = response.data.frenchOak.toDouble() ?: 0.0,
+                    quantity = response.data.quantity?.toIntOrNull() ?: 0,
+                    alcoholVolume = response.data.alcoholVolume?.toDoubleOrNull() ?: 0.0,
+                    frenchOak = response.data.frenchOak?.toDoubleOrNull() ?: 0.0,
                     drinkTime = response.data.drinkTime ?: "",
-                    rating = response.data.rating.toDouble() ?: 0.0,
-                    wineImage = response.data.image,
+                    rating = response.data.rating?.toDoubleOrNull() ?: 0.0
                 )
-                getByIdResponse = GetByIdResponse.Success(
-                    wineDto
-                )
+                getByIdResponseState = GetByIdResponse.Success(wine)
             } catch (e: Exception) {
-                val message = e.message
-                if (message == null) {
-                    getByIdResponse = null
-                    return@launch
-                }
-                getByIdResponse = GetByIdResponse.Error(message)
+                getByIdResponseState =
+                    if (e.message !== null ) GetByIdResponse.Error(e.message!!)
+                    else null
             }
         }
     }
@@ -114,23 +101,23 @@ class MainViewModel : ViewModel() {
     var createResponseState by mutableStateOf<CreateResponse?>(null)
         private set
 
-    fun createWine(equipment: WineRequest) {
+    fun createWine(wineRequest: WineRequest) {
         createResponseState = CreateResponse.Loading
 
         viewModelScope.launch {
             try {
-                val response = repository.createWine(equipment)
-
+                val response = repository.createWine(wineRequest)
                 createResponseState = CreateResponse.Success(response.message)
             } catch (e: Exception) {
-                val message = e.message
-                if (message == null) {
-                    createResponseState = null
-                    return@launch
-                }
-                createResponseState = CreateResponse.Error(message)
+                createResponseState =
+                    if (e.message !== null ) CreateResponse.Error(e.message!!)
+                    else null
             }
         }
+    }
+
+    fun resetCreateState() {
+        createResponseState = null
     }
 
     sealed class UpdateResponse {
@@ -138,25 +125,25 @@ class MainViewModel : ViewModel() {
         data class Success(val message: String): UpdateResponse()
         data class Error(val message: String): UpdateResponse()
     }
-    var updateResponse by mutableStateOf<UpdateResponse?>(null)
+    var updateResponseState by mutableStateOf<UpdateResponse?>(null)
 
-    fun updateByIdWine(wine: Wine) {
-        updateResponse = UpdateResponse.Loading
+    fun updateByIdWine(wineId: Int, wineRequest: WineRequest) {
+        updateResponseState = UpdateResponse.Loading
 
         viewModelScope.launch {
             try {
-                val response = repository.updateWineById(wine)
-                Log.d("update_wine_response", response.message)
-                updateResponse = UpdateResponse.Success(response.message)
+                val response = repository.updateWineById(wineId, wineRequest)
+                updateResponseState = UpdateResponse.Success(response.message)
             } catch (e: Exception) {
-                val message = e.message
-                if (message == null) {
-                    updateResponse = null
-                    return@launch
-                }
-                updateResponse = UpdateResponse.Error(message)
+                updateResponseState =
+                    if (e.message !== null ) UpdateResponse.Error(e.message!!)
+                    else null
             }
         }
+    }
+
+    fun resetUpdateState() {
+        updateResponseState = null
     }
 
     sealed class DeleteResponse {
@@ -164,31 +151,27 @@ class MainViewModel : ViewModel() {
         data class Success(val message: String): DeleteResponse()
         data class Error(val message: String): DeleteResponse()
     }
-    var deleteResponse by mutableStateOf<DeleteResponse?>(null)
+    var deleteResponseState by mutableStateOf<DeleteResponse?>(null)
         private set
 
     fun deleteWineById(wineId: String) {
-        deleteResponse = DeleteResponse.Loading
+        deleteResponseState = DeleteResponse.Loading
 
-        val id = wineId.toIntOrNull()
-        if (id == null) {
-            Log.d("delete_wine_validation_error", "Invalid wine ID")
-            return
-        }
+        val id = wineId.toIntOrNull() ?: return
 
         viewModelScope.launch {
             try {
                 val response = repository.deleteWineById(id)
-                deleteResponse = DeleteResponse.Success(response.message)
+                deleteResponseState = DeleteResponse.Success(response.message)
             } catch (e: Exception) {
-                val message = e.message
-                if (message == null) {
-                    deleteResponse = null
-                    return@launch
-                }
-                deleteResponse = DeleteResponse.Error(message)
+                deleteResponseState =
+                    if (e.message !== null ) DeleteResponse.Error(e.message!!)
+                    else null
             }
         }
     }
 
+    fun resetDeleteState() {
+        deleteResponseState = null
+    }
 }

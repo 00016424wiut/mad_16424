@@ -15,7 +15,8 @@ open class MyResponse (
     @SerialName(value = "status")
     val status: String = "",
     @SerialName(value = "message")
-    val message: String = "")
+    val message: String = ""
+)
 
 
 @Serializable
@@ -26,25 +27,23 @@ data class WineRecord(
     @SerialName(value = "description")
     val description: String?,
     @SerialName(value = "age")
-    val wineAge: Int,
+    val wineAge: String?,
     @SerialName(value = "size")
-    val bottleVolume: Int,
+    val bottleVolume: String?,
     @SerialName(value = "price")
-    val price: Double,
+    val price: String?,
     @SerialName(value = "date")
-    val date: String,
-    @SerialName(value = "quantity")
-    val quantity: Int,
-    @SerialName(value = "alcoholVolume")
-    val alcoholVolume: Double,
-    @SerialName(value = "frenchOak")
-    val frenchOak: Double,
-    @SerialName(value = "drinkTime")
-    val drinkTime: String,
-    @SerialName(value = "rating")
-    val rating: Double,
-    @SerialName(value = "image")
-    val image: String,
+    val date: String?,
+    @SerialName(value = "integer_one")
+    val quantity: String?,
+    @SerialName(value = "double_one")
+    val alcoholVolume: String?,
+    @SerialName(value = "double_two")
+    val frenchOak: String?,
+    @SerialName(value = "type")
+    val drinkTime: String?,
+    @SerialName(value = "double_three")
+    val rating: String?
 )
 
 @Serializable
