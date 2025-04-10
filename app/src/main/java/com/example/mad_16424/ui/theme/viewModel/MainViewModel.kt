@@ -1,6 +1,5 @@
 package com.example.mad_16424.ui.theme.viewModel
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -23,7 +22,6 @@ class MainViewModel : ViewModel() {
         private set
 
 
-    //Done!
     fun getAllWine () {
         getAllResponseState = GetAllResponse.Loading
         viewModelScope.launch {
@@ -54,7 +52,6 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    //In progress
     sealed class GetByIdResponse {
         data object Loading: GetByIdResponse()
         data class Success(val data: Wine): GetByIdResponse()

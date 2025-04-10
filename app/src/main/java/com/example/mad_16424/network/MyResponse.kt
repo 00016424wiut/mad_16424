@@ -2,11 +2,6 @@ package com.example.mad_16424.network
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Serializer
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
-import java.sql.Date
-import java.text.SimpleDateFormat
 
 @Serializable
 open class MyResponse (
